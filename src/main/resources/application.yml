@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: incident-summarizer
+
+anthropic:
+  api-key: ${ANTHROPIC_API_KEY:}
+  model: claude-sonnet-4-20250514
+  max-tokens: 1024
