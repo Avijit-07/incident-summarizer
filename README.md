@@ -30,7 +30,7 @@ flowchart LR
 
 | Component        | Technology                    |
 |------------------|-------------------------------|
-| Language         | Java 21                       |
+| Language         | Java 25                       |
 | Framework        | Spring Boot 3.x               |
 | AI Provider      | Anthropic Claude API          |
 | Database         | H2 / SQLite                   |
