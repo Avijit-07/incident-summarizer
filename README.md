@@ -87,8 +87,16 @@ cd incident-summarizer
 export ANTHROPIC_API_KEY=your-key-here
 
 # Build and run
-./mvnw spring-boot:run
+./gradlew bootRun
 ```
+
+## Configuration
+
+| Environment Variable | Required | Description                                   |
+|-----------------------|----------|-----------------------------------------------|
+| `ANTHROPIC_API_KEY`   | Yes      | API key used to authenticate with the Claude API. Read at startup via `anthropic.api-key` in `application.yml`. |
+
+Never commit your API key. Store it in a local `.env` file or export it in your shell — `.env` is already excluded via `.gitignore`.
 
 ## Example Usage
 
@@ -119,3 +127,5 @@ curl -X POST http://localhost:8080/incidents \
 ```
 
 ## License
+
+This project is licensed under the [MIT License](LICENSE).
