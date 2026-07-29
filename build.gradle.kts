@@ -3,6 +3,7 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 plugins {
     java
     id("org.springframework.boot") version "4.1.0"
+    id("com.diffplug.spotless") version "8.9.0"
 }
 
 group = "dev.avijit"
@@ -28,4 +29,10 @@ dependencies {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+spotless {
+    java {
+        googleJavaFormat()
+    }
 }

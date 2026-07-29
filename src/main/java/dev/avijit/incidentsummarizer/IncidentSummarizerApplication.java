@@ -2,7 +2,6 @@ package dev.avijit.incidentsummarizer;
 
 import dev.avijit.incidentsummarizer.config.AnthropicConfig;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
@@ -10,7 +9,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties(AnthropicConfig.class)
 public class IncidentSummarizerApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(IncidentSummarizerApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(IncidentSummarizerApplication.class, args);
+  }
 }
