@@ -5,8 +5,4 @@ import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @ConfigurationProperties(prefix = "anthropic")
 public record AnthropicConfig(
-        String url,
-        String apiKey,
-        @DefaultValue("claude-sonnet-4-5") String model,
-        int maxTokens
-) {}
+    String url, String apiKey, @DefaultValue("claude-sonnet-4-5") String model, int maxTokens) {}
