@@ -1,10 +1,10 @@
 package dev.avijit.incidentsummarizer.service;
 
+import dev.avijit.incidentsummarizer.config.AnthropicConfig;
 import dev.avijit.incidentsummarizer.model.Incident;
 import dev.avijit.incidentsummarizer.model.IncidentSummary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -19,25 +19,20 @@ import java.util.stream.Collectors;
 public class ClaudeService {
 
     private static final Logger log = LoggerFactory.getLogger(ClaudeService.class);
-    private static final String ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
 
+    private final AnthropicConfig anthropicConfig;
     private final RestClient restClient;
     private final ObjectMapper objectMapper;
-    private final String model;
-    private final int maxTokens;
 
     public ClaudeService(
-            @Value("${anthropic.api-key}") String apiKey,
-            @Value("${anthropic.model}") String model,
-            @Value("${anthropic.max-tokens}") int maxTokens,
+            AnthropicConfig anthropicConfig,
             ObjectMapper objectMapper
     ) {
-        this.model = model;
-        this.maxTokens = maxTokens;
+        this.anthropicConfig = anthropicConfig;
         this.objectMapper = objectMapper;
         this.restClient = RestClient.builder()
-                .baseUrl(ANTHROPIC_API_URL)
-                .defaultHeader("x-api-key", apiKey)
+                .baseUrl(anthropicConfig.url())
+                .defaultHeader("x-api-key", anthropicConfig.apiKey())
                 .defaultHeader("anthropic-version", "2023-06-01")
                 .build();
     }
@@ -56,8 +51,8 @@ public class ClaudeService {
 
     private String callClaude(String userMessage) {
         var requestBody = Map.of(
-                "model", model,
-                "max_tokens", maxTokens,
+                "model", anthropicConfig.model(),
+                "max_tokens", anthropicConfig.maxTokens(),
                 "messages", List.of(
                         Map.of("role", "user", "content", userMessage)
                 ),
@@ -66,7 +61,7 @@ public class ClaudeService {
                         + "and a suggested root cause. Be concise and actionable."
         );
 
-        log.info("Calling Claude API (model: {})", model);
+        log.info("Calling Claude API (model: {})", anthropicConfig.model());
 
         String responseBody = restClient.post()
                 .contentType(MediaType.APPLICATION_JSON)
