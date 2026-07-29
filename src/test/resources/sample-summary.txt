@@ -1,0 +1,56 @@
+========== INCIDENT SUMMARY ==========
+
+# Incident Summary: Payment Service High Error Rate
+
+## 1. Timeline
+
+| Time (UTC) | Event |
+|------------|-------|
+| **14:11:00** | Deploy v2.14.3 to payment-service (inferred: ~20 mins before incident) |
+| **14:31:45** | Database connection timeouts begin appearing in logs |
+| **14:32:00** | **CRITICAL**: Error rate exceeds 5% threshold |
+| **14:33:00** | **WARNING**: Database connection pool exhausted (100/100 connections) |
+| **14:35:00** | **CRITICAL**: 502 Bad Gateway responses spike |
+| **14:37:00** | On-call engineer identifies recent deployment |
+| **14:38:00** | Root cause identified: v2.14.3 introduced batch query opening multiple connections per request |
+| **14:40:00** | Rollback to v2.14.2 initiated |
+| **14:45:00** | Auto-scaling triggered (attempted mitigation) |
+| **14:50:00** | Rollback complete; connections begin stabilizing |
+| **14:55:00** | Database connections drop to 45/100 |
+| **15:02:00** | Error rate returns below 1% - incident resolved |
+
+**Total Duration:** ~30 minutes (detection to resolution)
+
+## 2. Impact Assessment
+
+**Severity:** HIGH
+
+- **Service Affected:** payment-service (customer payment processing)
+- **Error Rate:** >5% (potentially impacting 1 in 20 payment transactions)
+- **User Impact:** Payment failures, 502 errors preventing transaction completion
+- **Duration:** ~30 minutes of degraded service
+- **Business Impact:** Revenue loss from failed transactions, potential customer trust erosion
+- **Scope:** All users attempting payments during the incident window
+
+## 3. Suggested Root Cause
+
+**Primary Root Cause:** Inefficient database connection management introduced in deployment v2.14.3
+
+**Technical Details:**
+- Version 2.14.3 added a new batch query that opened multiple database connections per request
+- The payments-db-primary connection pool limit (100 connections) was quickly exhausted
+- Connection timeout threshold (30 seconds) was reached, causing cascading failures
+- Unable to acquire connections led to transaction failures and 502 responses
+
+**Contributing Factors:**
+- Insufficient pre-production load testing of v2.14.3
+- Database connection pool size (100) may be undersized for current load patterns
+- No connection leak detection or alerts prior to exhaustion
+
+**Recommended Actions:**
+1. **Immediate:** Review and optimize batch query in v2.14.3 to reuse connections
+2. **Short-term:** Increase database connection pool size with proper monitoring
+3. **Long-term:** Implement connection pool utilization alerts at 70-80% threshold
+4. **Process:** Enhance deployment process with load testing requirements for DB-intensive changes
+=======================================
+
