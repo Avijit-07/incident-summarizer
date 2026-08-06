@@ -1,0 +1,20 @@
+baseURL = 'https://avijit-07.github.io/incident-summarizer/'
+locale = 'en-us'
+title = 'Incident Summarizer'
+theme = 'congo'
+enableRobotsTXT = true
+
+[params]
+  description = "AI-powered incident summarization using the Claude API"
+  homepage.layout = "profile"
+  colorScheme = "blue"
+
+[[menu.main]]
+  name = "Docs"
+  pageRef = "/docs"
+  weight = 10
+
+[[menu.main]]
+  name = "Blog"
+  pageRef = "/blog"
+  weight = 20
