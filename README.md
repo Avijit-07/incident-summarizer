@@ -40,7 +40,7 @@ flowchart LR
 
 ## Project Milestones
 
-### Week 1 — Hello LLM
+### Week 1 — Hello LLM ✅
 Scaffold the Spring Boot project, create a sample hardcoded incident payload, and wire up a basic Claude API call that returns a summary.
 
 **Learning focus:** API integration basics, prompt engineering fundamentals.
